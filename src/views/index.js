@@ -24,8 +24,11 @@ const Main = () => {
             setLoading(false);
         }
     }
-    useEffect(async () => {
-        await getExludedDates();
+    useEffect(() => {
+        async function fetchData() {
+            await getExludedDates();
+        }
+        fetchData();
     }, [])
 
     return (
