@@ -1,32 +1,37 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
+import React, { useState } from 'react'
+import { enGB } from 'date-fns/locale'
+import { DatePickerCalendar } from 'react-nice-dates'
+import { isEqual } from "date-fns";
+import { format } from "date-fns";
+import 'react-nice-dates/build/style.css'
+function DatePickerComponent({ unavailableDates = [] }) {
+    const [date, setDate] = useState();
+    const modifiers = {
+        disabled: (date) => {
+            const isDisabled = unavailableDates.map(date => new Date(date)).some((dateToDisable) =>
+                isEqual(dateToDisable, date)
+            );
 
-import "react-datepicker/dist/react-datepicker.css";
-
-
-const DatePickerComponent = ({ unavailableDates =[], getUnavailableDates=()=>{}}) => {
-
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const onChange = (date) => {
-        setSelectedDate(date);
-    };
-    const onMonthChange = (date) => {
-        getUnavailableDates(date.getMonth());
+            return isDisabled;
+        }
     }
-       
-    
+
     return (
-        <DatePicker
-        excludeDates={unavailableDates.map(date=>new Date(date))}
-            selected={selectedDate}
-            onChange={onChange}
-            onMonthChange={onMonthChange}
-            minDate={new Date()}
-            showTimeSelect
-            inline
-        />
-    );
+        <div>
+            <p>
+                Selected date:{" "}
+                {date ? format(date, "dd MMM yyyy", { locale: enGB }) : "none"}.
+            </p>
+
+            <DatePickerCalendar date={date} onDateChange={setDate} locale={enGB} modifiers={modifiers}>
+                {({ inputProps, focused }) => (
+                    <input
+                        className={'input' + (focused ? ' -focused' : '')}
+                        {...inputProps}
+                    />
+                )}
+            </DatePickerCalendar>
+        </div>
+    )
 }
-
 export default DatePickerComponent;
-

@@ -11,11 +11,11 @@ const Main = () => {
 
 
 
-    const getExludedDates = async (month = new Date().getMonth()) => {
+    const getExludedDates = async () => {
         setLoading(true)
         try {
             setTimeout(async () => {
-                const res = await services.getUnavailableDates(month);
+                const res = await services.getUnavailableDates();
                 setUnavailablesDates(res.data)
                 setLoading(false);
             }, 2000);
@@ -33,10 +33,10 @@ const Main = () => {
 
     return (
         <div>
-            <Header />
-            <header className="App-header">
-                {loading && <Loader />}
-                <div className="mt-5"><DatePicker unavailableDates={unavailableDates} getUnavailableDates={getExludedDates} /></div>
+            <Header/>
+            <header className="container m-6 p-6">
+                {loading && <Loader />} 
+                <div className="container-sm m-6 p-6"><DatePicker unavailableDates={unavailableDates}/></div>
             </header>
         </div>
     );
